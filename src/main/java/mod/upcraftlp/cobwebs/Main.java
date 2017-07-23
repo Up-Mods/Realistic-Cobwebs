@@ -3,7 +3,6 @@ package mod.upcraftlp.cobwebs;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -50,6 +50,8 @@ public class Main {
 	@Mod.EventBusSubscriber
 	public static class WebHandler {
 
+		public static final Random random = new Random();
+
 		@SubscribeEvent
 		public static void onRegisterBlocks(RegistryEvent.Register<Block> event) {
 			event.getRegistry().register(new BlockDecoWeb());
@@ -76,10 +78,10 @@ public class Main {
 			if(item == Item.getItemFromBlock(Blocks.TORCH) || item == Items.FLINT_AND_STEEL) {
 				BlockPos pos = event.getPos();
 				if(world.getBlockState(pos).getBlock() instanceof BlockWeb) {
-					BlockPos webPos = event.getPos();
-					Random random = new Random();
-					for(int i = 0; i < 50; i++)	world.spawnParticle(EnumParticleTypes.FLAME, webPos.getX() + random.nextGaussian(), webPos.getY() + random.nextGaussian(), webPos.getZ() + random.nextGaussian(), 0.005, 0.005, 0.005);
-					if(!world.isRemote) {
+					if(world instanceof WorldServer) {
+						BlockPos webPos = event.getPos();
+						WorldServer server = (WorldServer) world;
+						server.spawnParticle(EnumParticleTypes.FLAME, false, webPos.getX() + 0.5D, webPos.getY() + 0.5D, webPos.getZ() + 0.5D, 7 + random.nextInt(40), random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, random.nextDouble() * 0.5D,0.005);
 						world.setBlockToAir(webPos);
 						if(item == Items.FLINT_AND_STEEL) {
 							stack.damageItem(1, event.getEntityPlayer());
