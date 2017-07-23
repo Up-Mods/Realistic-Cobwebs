@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cobwebs",
+  "name": "Realistic Cobwebs Mod",
+  "description": "Make them cobwebs burn!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/realistic-cobwebs-mod",
+  "updateUrl": "",
+  "authorList": ["UpcraftLP"],
+  "credits": "UpcraftLP",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
