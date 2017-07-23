@@ -1,3 +1,4 @@
 {
+  "__comment": "workaround for blockstate item models",
   "parent": "item/generated"
 }
