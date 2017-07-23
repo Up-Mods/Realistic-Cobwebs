@@ -3,14 +3,14 @@
 	"promos": {
 		"1.10.2-latest": "1.0.1",
 		"1.10.2-recommended": "1.0.1",
-		"1.12-latest": "1.0.2"
+		"1.12-latest": "1.0.2",
 		"1.12-recommended": "1.0.2"
 	},
 	"1.12": {
 		"1.0.2": "* ported to 1.12!\n* cobwebs can catch fire (configurable)\n* consuming torches ddefaults to off"
 	},
 	"1.10.2": {
-		"1.0.1": "* added configuration file\n* torches will be consumed when burning cobwebs (configurable)"
+		"1.0.1": "* added configuration file\n* torches will be consumed when burning cobwebs (configurable)",
 		"1.0.0": "* Initial Release"
 	}
 }
