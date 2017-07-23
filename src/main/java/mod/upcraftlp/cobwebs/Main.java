@@ -1,21 +1,27 @@
 package mod.upcraftlp.cobwebs;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -24,6 +30,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Random;
 
@@ -38,6 +45,8 @@ public class Main {
 			Blocks.FIRE.setFireInfo(Blocks.WEB, 15, 70);
 			Blocks.FIRE.setFireInfo(ModThings.DECO_WEB, 15, 70);
 		}
+		WebHandler.stringID = OreDictionary.getOreID("string");
+		WebHandler.deco_web_recipe = CraftingManager.getRecipe(new ResourceLocation(MOD_ID, "deco_web"));
 	}
 
 	@GameRegistry.ObjectHolder(MOD_ID)
@@ -50,7 +59,24 @@ public class Main {
 	@Mod.EventBusSubscriber
 	public static class WebHandler {
 
-		public static final Random random = new Random();
+		private static final Random random = new Random();
+		private static IRecipe deco_web_recipe;
+		private static int stringID;
+
+
+		@SubscribeEvent
+		public static void onPickupString(EntityItemPickupEvent event) {
+			if(event.getEntityPlayer() instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) event.getEntityPlayer();
+				if(player.getRecipeBook().containsRecipe(deco_web_recipe)) return;
+				for(int id : OreDictionary.getOreIDs(event.getItem().getItem())) {
+					if(id == stringID) {
+						player.unlockRecipes(Lists.newArrayList(deco_web_recipe));
+						break;
+					}
+				}
+			}
+		}
 
 		@SubscribeEvent
 		public static void onRegisterBlocks(RegistryEvent.Register<Block> event) {
