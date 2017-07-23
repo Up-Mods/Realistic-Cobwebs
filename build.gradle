@@ -1,36 +1,53 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+//Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
-/*
-// for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
+def username = "${mod_name}"
+if (project.hasProperty('dev_mail')) {
+    username = "${dev_mail}"
 }
-*/
-version = "1.0.1-MC1.10.2"
-group= "mod.upcraftlp.cobwebs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "realistic-cobwebs"
+else if(project.hasProperty('dev_username')) {
+    username = "${dev_username}"
+}
 
-sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
+version = "${project.mc_version}-${project.mod_version}"
+group= project.base_package // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+//noinspection GroovyUnusedAssignment
+archivesBaseName = project.mod_name
+
+sourceCompatibility = targetCompatibility = project.jvm_version // Need this here so eclipse task generates correctly.
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.6"
+    sourceCompatibility = targetCompatibility = project.jvm_version
+}
+
+repositories {
+    maven {
+        //JEI files
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "http://modmaven.k-4u.nl"
+    }
+
+    maven {
+        //fallback for almost everything, this is CurseForge :P
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
 }
 
 minecraft {
-    version = "1.10.2-12.18.1.2075"
+    version = "${project.mc_version}-${project.forge_version}"
     if(file('../run').exists()) {
 		runDir = "../run"
 	}
@@ -39,36 +56,37 @@ minecraft {
 		runDir = "run"
 	}
     
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20160518"
+    mappings = project.forge_mappings
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	
+	replace "@VERSION@", project.mod_version
+    replaceIn "Reference.java"
+
+    //auto-configure the run arguments
+    clientRunArgs += "--username=${username}"
+    if(project.hasProperty('dev_password')) {
+        clientRunArgs += " --password=${dev_password}"
+    }
+    serverRunArgs += "nogui" //mc server GUIs suck :P
+    serverJvmArgs += "-Dfml.queryResult=confirm" //skips the /fml confirm part
+}
+
+sourceSets {
+	
+	main {
+		java {
+			srcDir 'src/main/java'
+		}
+		resources {
+			srcDir 'resources'
+		}
+	}
 }
 
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
 
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    // at runtime, use the full JEI jar
+    runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
 
 }
 
@@ -90,4 +108,7 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+	
+	//ATs
+	rename '(.+_at.cfg)', 'META-INF/$1'
 }
