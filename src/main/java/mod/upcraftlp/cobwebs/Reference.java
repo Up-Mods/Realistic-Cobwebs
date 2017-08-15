@@ -7,7 +7,7 @@ public class Reference {
 	public static final String MOD_ID = "cobwebs";
 	public static final String MODNAME = "Realistic Cobwebs Mod";
 	public static final String VERSION = "@VERSION@";
-	public static final String MCVERSIONS = "[1.12,)";
+	public static final String MCVERSIONS = "[1.12,1.13)";
 	public static final String UPDATE_JSON = "https://raw.githubusercontent.com/UpcraftLP/Realistic-Cobwebs/master/Versions.json";
 
 	@Config(modid = MOD_ID)
