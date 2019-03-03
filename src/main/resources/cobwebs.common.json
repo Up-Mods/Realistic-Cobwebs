@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "sora.dwarfcoal.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinAbstractFurnaceBlockEntity"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

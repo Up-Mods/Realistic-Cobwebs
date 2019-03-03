@@ -1,114 +1,145 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle.forge'
-//Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
+import java.nio.charset.StandardCharsets
+import java.time.Year
 
-def username = "${mod_name}"
-if (project.hasProperty('dev_mail')) {
-    username = "${dev_mail}"
-}
-else if(project.hasProperty('dev_username')) {
-    username = "${dev_username}"
+plugins {
+	id 'fabric-loom' version '0.2.0-SNAPSHOT'
+    id "com.matthewprenger.cursegradle" version "1.1.2"
 }
 
-version = "${project.mc_version}-${project.mod_version}"
-group= project.base_package // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-//noinspection GroovyUnusedAssignment
-archivesBaseName = project.mod_name
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-sourceCompatibility = targetCompatibility = project.jvm_version // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = project.jvm_version
+archivesBaseName = "cobwebs"
+version = "1.0.0"
+
+minecraft {
+    
 }
 
 repositories {
-    maven {
-        //JEI files
-        url = "http://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "http://modmaven.k-4u.nl"
-    }
-
-    maven {
-        //fallback for almost everything, this is CurseForge :P
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
-}
-
-minecraft {
-    version = "${project.mc_version}-${project.forge_version}"
-    if(file('../run').exists()) {
-		runDir = "../run"
-	}
-	else
-	{
-		runDir = "run"
-	}
-    
-    mappings = project.forge_mappings
-    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-	
-	replace "@VERSION@", project.mod_version
-    replaceIn "Reference.java"
-
-    //auto-configure the run arguments
-    clientRunArgs += "--username=${username}"
-    if(project.hasProperty('dev_password')) {
-        clientRunArgs += " --password=${dev_password}"
-    }
-    serverRunArgs += "nogui" //mc server GUIs suck :P
-    serverJvmArgs += "-Dfml.queryResult=confirm" //skips the /fml confirm part
-}
-
-sourceSets {
-	
-	main {
-		java {
-			srcDir 'src/main/java'
-		}
-		resources {
-			srcDir 'resources'
-		}
-	}
+	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
 }
 
 dependencies {
+    minecraft "com.mojang:minecraft:19w09a"
+    mappings "net.fabricmc:yarn:19w09a.2"
+    modCompile "net.fabricmc:fabric-loader:0.3.7.109"
+	compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
-    // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
 
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modCompile "net.fabricmc:fabric:0.2.3.108"
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
 
-    // replace stuff in mcmod.info, nothing else
+processResources {
+    // this will ensure that this task is redone when there"s a change
+    inputs.property "version", project.version
+
+    // replace stuff in fabric.mod.json, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        include "fabric.mod.json"
+
+        // add mod metadata
+        expand "version": project.version
     }
-        
-    // copy everything else, thats not the mcmod.info
+
+    // copy everything else, that"s not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "fabric.mod.json"
     }
-	
-	//ATs
-	rename '(.+_at.cfg)', 'META-INF/$1'
+}
+curseforge {
+    if (project.hasProperty("curse_key")) {
+        apiKey = findProperty("curse_key")
+    }
+
+    if (project.hasProperty("curseforge_id")) {
+        project {
+            id = findProperty("curseforge_id")
+            mainArtifact(jar) {
+                displayName = "${project.archivesBaseName} v${project.version} MC${project.minecraft_version}"
+            }
+            releaseType = project.release_type
+            relations {
+                requiredDependency("fabric")
+            }
+
+            //TODO remove when MC 1.14 releases
+            //usually automatically determined by the CurseGradle plugin
+            addGameVersion '1.14-Snapshot'
+
+            changelogType = "markdown"
+            changelog = getChangelogText()
+            
+            addArtifact sourcesJar
+        }
+        options {
+            forgeGradleIntegration = false
+        }
+
+    }
+}
+
+afterEvaluate {
+    //make curseforge task depend on build
+    String curseID = findProperty(curseforge_id);
+    if (curseID != null) {
+        tasks.each {
+            if (it.name == "curseforge" + curseID) {
+                it.dependsOn remapJar, remapSourcesJar
+            }
+        }
+    }
+}
+
+String getChangelogText() {
+    def changelogFile = new File(project.projectDir, "changelog.md")
+    String str = ''
+    if(!changelogFile.exists()) {
+        System.out.println("No changelog file found, creating one at \"" + changelogFile.getAbsolutePath() + "\"")
+        changelogFile.createNewFile()
+        String newText = '------------------------------------------------------\n' +
+                'Version ' + project.version + '\n' +
+                '------------------------------------------------------\n' +
+                'Additions\n' +
+                '- None\n' +
+                '\n' +
+                'Changes\n' +
+                '- None\n' +
+                '\n' +
+                'Bug Fixes\n' +
+                '- None\n'
+        String oldText = changelogFile.getText()
+        changelogFile.setText(newText + oldText)
+        return str
+    }
+    String separator = '---'
+    int lineCount = 0
+    boolean done = false
+    changelogFile.eachLine {
+        if (done || it == null) {
+            return
+        }
+        if (lineCount < 3) {
+            lineCount++
+            if (it.startsWith(separator)) {
+                return ""
+            }
+        }
+        if (!it.startsWith(separator)) {
+            str += "$it" + (lineCount < 3 ? ':\n\n' : '\n')
+            return
+        }
+        done = true // once we go past the first version block, parse no more
+    }
+    str += "\n\n see full changelog [here](" + findProperty("changelog_url") + " \"Changelog\")"
+    return str
 }

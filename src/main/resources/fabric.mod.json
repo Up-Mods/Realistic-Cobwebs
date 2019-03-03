@@ -1,0 +1,11 @@
+{
+  "id": "cobwebs",
+  "name": "Realistic Webs",
+  "description": "Set fire to those pesky cobwebs",
+  "version": "${version}",
+  "side": "universal",
+  "initializer": "nerdhub.cobwebs.RealisticCobwebs",
+  "requires": {
+    "fabric": "*"
+  }
+}
