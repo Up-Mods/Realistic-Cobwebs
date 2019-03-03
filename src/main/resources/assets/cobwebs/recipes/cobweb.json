@@ -2,16 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "# #",
-    " # ",
+    " s ",
     "# #"
   ],
   "key": {
     "#": {
       "type": "forge:ore_dict",
       "ore": "string"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
     }
   },
   "result": {
-    "item": "cobwebs:deco_web"
+    "item": "minecraft:web",
+    "count": 4
   }
 }

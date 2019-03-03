@@ -86,7 +86,7 @@ sourceSets {
 dependencies {
 
     // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
+    //runtime "mezz.jei:jei_${project.mc_version}:${project.jei_version}"
 
 }
 

@@ -14,10 +14,13 @@ public class Reference {
 	@Config.LangKey(MOD_ID + ".config.title")
 	public static class ModConfig {
 
-		@Config.Comment("true to enable consumption of torches when burning cobwebs")
-		public static boolean consumeTorches = false;
-
 		@Config.Comment("Whether or not Cobwebs (and deco webs) should burn")
 		public static boolean websBurn = true;
+
+		@Config.Comment("Set Torch Consumption Chance")
+		public static double torchConsumeChance = 3.0D;
+
+		@Config.Comment("Flint and Steel Damage Cost")
+		public static int flintAndSteelDamage = 1;
 	}
 }
