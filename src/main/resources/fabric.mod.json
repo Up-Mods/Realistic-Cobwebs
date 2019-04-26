@@ -1,11 +1,28 @@
 {
+  "schemaVersion": 1,
   "id": "cobwebs",
   "name": "Realistic Webs",
-  "description": "Set fire to those pesky cobwebs",
   "version": "${version}",
+
   "side": "universal",
-  "initializer": "nerdhub.cobwebs.RealisticCobwebs",
+  "entrypoints": {
+    "main": [
+      "nerdhub.cobwebs.RealisticCobwebs"
+    ]
+  },
   "requires": {
+    "fabricloader": ">=0.4.0",
     "fabric": "*"
-  }
+  },
+
+  "authors": [
+    "NerdHub"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/realistic-cobwebs",
+    "issues": "https://github.com/NerdHubMC/Realistic-Cobwebs/issues"
+  },
+  "licence": "GNU General Public Licence",
+  "description": "Set fire to those pesky cobwebs",
+  "icon": "assets/cobwebs/icon.png"
 }
