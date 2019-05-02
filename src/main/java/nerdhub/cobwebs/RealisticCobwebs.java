@@ -29,21 +29,26 @@ public class RealisticCobwebs implements ModInitializer {
         ConfigHandler.registerConfig("cobwebs", ModConfig.class);
         ResourceManagerHelper.get(ResourceType.DATA).registerReloadListener(new ConfigReloader());
         UseBlockCallback.EVENT.register((playerEntity, world, hand, blockHitResult) -> {
-            if(playerEntity.isSneaking() ||playerEntity.getStackInHand(hand).isEmpty())return ActionResult.PASS;
+            if(playerEntity.isSneaking() || playerEntity.getStackInHand(hand).isEmpty()) {
+                return ActionResult.PASS;
+            }
             ItemStack stack = playerEntity.getStackInHand(hand);
             Item item = stack.getItem();
-            if(item == Item.getItemFromBlock(Blocks.TORCH)|| item == Items.FLINT_AND_STEEL){
-                if(blockHitResult.getType() == HitResult.Type.BLOCK){
-                    if(world.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof CobwebBlock){
-                        if(world instanceof ServerWorld){
+            if(item == Item.getItemFromBlock(Blocks.TORCH) || item == Items.FLINT_AND_STEEL) {
+                if(blockHitResult.getType() == HitResult.Type.BLOCK) {
+                    if(world.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof CobwebBlock) {
+                        if(world instanceof ServerWorld) {
                             BlockPos webPos = blockHitResult.getBlockPos();
                             ServerWorld server = (ServerWorld) world;
-                            server.spawnParticles(ParticleTypes.FLAME, webPos.getX() + 0.5D, webPos.getY() + 0.5D, webPos.getZ() + 0.5D, 7 + random.nextInt(40), random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, random.nextDouble() * 0.5D,0.005);
+                            server.spawnParticles(ParticleTypes.FLAME, webPos.getX() + 0.5D, webPos.getY() + 0.5D, webPos.getZ() + 0.5D, 7 + random.nextInt(40), random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, 0.005);
                             world.clearBlockState(webPos, false);
-                            if(item == Items.FLINT_AND_STEEL){
-                                stack.applyDamage(1, playerEntity, (player) -> {  });
-                            }else if(item == Items.TORCH && random.nextDouble()< ConfigHandler.getConfig(ModConfig.class).torchConsumeChance){
-                                stack.subtractAmount(ConfigHandler.getConfig(ModConfig.class).flintAndSteelDamagePerUse);
+                            if(!playerEntity.isCreative()) {
+                                if(item == Items.FLINT_AND_STEEL) {
+                                    stack.applyDamage(1, playerEntity, (player) -> player.sendToolBreakStatus(hand));
+                                }
+                                else if(item == Items.TORCH && random.nextDouble() < ConfigHandler.getConfig(ModConfig.class).torchConsumeChance) {
+                                    stack.subtractAmount(ConfigHandler.getConfig(ModConfig.class).flintAndSteelDamagePerUse);
+                                }
                             }
                         }
                         return ActionResult.SUCCESS;
@@ -52,8 +57,5 @@ public class RealisticCobwebs implements ModInitializer {
             }
             return ActionResult.PASS;
         });
-
     }
-
-
 }
