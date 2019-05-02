@@ -5,12 +5,14 @@ import nerdhub.cobwebs.util.ConfigHandler;
 import nerdhub.cobwebs.util.ConfigReloader;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CobwebBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.HitResult;
@@ -20,12 +22,12 @@ import java.util.Random;
 
 public class RealisticCobwebs implements ModInitializer {
 
-    public static final Random random = new Random();
+    private static final Random random = new Random();
 
     @Override
     public void onInitialize() {
         ConfigHandler.registerConfig("cobwebs", ModConfig.class);
-        ConfigReloader.init();
+        ResourceManagerHelper.get(ResourceType.DATA).registerReloadListener(new ConfigReloader());
         UseBlockCallback.EVENT.register((playerEntity, world, hand, blockHitResult) -> {
             if(playerEntity.isSneaking() ||playerEntity.getStackInHand(hand).isEmpty())return ActionResult.PASS;
             ItemStack stack = playerEntity.getStackInHand(hand);

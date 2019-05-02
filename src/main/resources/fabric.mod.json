@@ -1,28 +1,47 @@
 {
-  "schemaVersion": 1,
-  "id": "cobwebs",
-  "name": "Realistic Webs",
-  "version": "${version}",
-
-  "side": "universal",
-  "entrypoints": {
-    "main": [
-      "nerdhub.cobwebs.RealisticCobwebs"
-    ]
-  },
-  "requires": {
-    "fabricloader": ">=0.4.0",
-    "fabric": "*"
-  },
-
-  "authors": [
-    "NerdHub"
-  ],
-  "contact": {
-    "homepage": "https://minecraft.curseforge.com/projects/realistic-cobwebs",
-    "issues": "https://github.com/NerdHubMC/Realistic-Cobwebs/issues"
-  },
-  "licence": "GNU General Public Licence",
-  "description": "Set fire to those pesky cobwebs",
-  "icon": "assets/cobwebs/icon.png"
+    "schemaVersion": 1,
+    "id": "cobwebs",
+    "name": "Realistic Webs",
+    "description": "Set fire to those pesky cobwebs",
+    "licence": "GPL-3.0-or-later",
+    "version": "${version}",
+    "side": "universal",
+    "entrypoints": {
+        "main": [
+            "nerdhub.cobwebs.RealisticCobwebs"
+        ]
+    },
+    "requires": {
+        "fabricloader": ">=0.4.0",
+        "fabric": "*"
+    },
+    "authors": [
+        {
+            "name": "NerdHub",
+            "contact": {
+                "homepage": "https://github.com/NerdHubMC"
+            }
+        },
+        {
+            "name": "UpcraftLP",
+            "contact": {
+                "homepage": "https://twitter.com/UpcraftLP"
+            }
+        },
+        {
+            "name": "Radient_Sora",
+            "contact": {
+                "homepage": "https://twitter.com/Radient_Sora"
+            }
+        }
+    ],
+    "contributors": [
+        "raphydaphy"
+    ],
+    "contact": {
+        "homepage": "https://minecraft.curseforge.com/projects/250393",
+        "issues": "https://github.com/NerdHubMC/Realistic-Cobwebs/issues",
+        "sources": "https://github.com/NerdHubMC/Realistic-Cobwebs"
+    },
+    "icon": "assets/cobwebs/icon.png"
 }
