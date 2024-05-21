@@ -6,6 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -50,6 +52,9 @@ public class RealisticCobwebs {
                         }
                     }
                 }
+                if (stack.getMaxDamage() > 0) {
+                    level.playSound(player, startPos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 0.6F, player.getRandom().nextFloat() * 0.4F + 0.8F);
+                }
                 return InteractionResult.sidedSuccess(level.isClientSide());
             }
         }
@@ -60,6 +65,7 @@ public class RealisticCobwebs {
     public static void burnBlock(ServerLevel level, BlockPos webPos, RandomSource random, boolean burst) {
         level.sendParticles(ParticleTypes.FLAME, webPos.getX() + 0.5D, webPos.getY() + 0.5D, webPos.getZ() + 0.5D, 7 + random.nextInt(40), random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, random.nextDouble() * 0.5D, 0.005);
         level.removeBlock(webPos, false);
+        level.playSound(null, webPos, SoundEvents.CANDLE_EXTINGUISH, SoundSource.BLOCKS, random.nextFloat() * 0.3F, random.nextFloat() * 0.4F + 0.8F);
 
         if (burst) {
             for (BlockPos pos : BlockPos.betweenClosed(webPos.offset(-1, -1, -1), webPos.offset(1, 1, 1))) {
