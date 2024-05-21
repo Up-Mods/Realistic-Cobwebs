@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:slimeballs",
+      "required": false
+    },
+    "minecraft:slime_ball"
+  ]
+}

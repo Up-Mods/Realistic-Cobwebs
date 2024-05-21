@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "cobwebs",
+  "pattern": [
+    "# #",
+    " s ",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "tag": "realistic_cobwebs:strings"
+    },
+    "s": {
+      "tag": "realistic_cobwebs:slimeballs"
+    }
+  },
+  "result": {
+    "item": "minecraft:cobweb",
+    "count": 4
+  }
+}

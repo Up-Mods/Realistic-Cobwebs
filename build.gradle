@@ -1,47 +1,204 @@
 plugins {
-    id 'fabric-loom' version '0.2.2-SNAPSHOT'
-    id "com.matthewprenger.cursegradle" version "1.2.0"
-    id "maven-publish"
+    id 'idea'
+	// Required for NeoGradle
+	id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+    id 'maven-publish'
 }
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+def javaVersion = 17
 
-group = "com.github.NerdHubMC"
-archivesBaseName = "Realistic-Cobwebs"
-version = System.getenv("TRAVIS_TAG") ?: project.mod_version
+group = maven_group_id
 
-minecraft {
+def ENV = System.getenv()
+def NOW = new Date()
+def buildTime = ENV.BUILD_TIME ?: NOW.format('yyyyMMddHHmmss')
 
-}
+boolean isPreviewBuild = !ENV.TAG || ENV.TAG.matches(".+-.+")
+def buildNumber = !ENV.TAG ? ("${ENV.BUILD_NUMBER ? "build.${ENV.BUILD_NUMBER}" : buildTime}") : ""
+version = (ENV.TAG ?: "${libs.versions.minecraft.get()}-development") + ((isPreviewBuild && !ENV.TAG) ? "+${buildNumber}" : "")
 
-repositories {
-    maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
-}
+def mod_name = rootProject.name.replaceAll("-", "_").toLowerCase(Locale.ROOT)
 
-dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings "net.fabricmc:yarn:${minecraft_version}+build.${yarn_mappings}"
-    modCompile "net.fabricmc:fabric-loader:${loader_version}"
-    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
-    modCompile "net.fabricmc:fabric:${fabric_version}"
-}
+println("Building ${project.name} ${version}")
 
-apply from: "https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/fabric/basic_project.gradle"
+subprojects {
+	apply plugin: 'java'
+	project.group = rootProject.group
+	project.version = rootProject.version
 
-processResources {
-    // this will ensure that this task is redone when there"s a change
-    inputs.property "version", project.version
-
-    // replace stuff in fabric.mod.json, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-
-        // add mod metadata
-        expand "version": project.version
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+            vendor = JvmVendorSpec.MICROSOFT
+        }
+        withSourcesJar()
+//        withJavadocJar()
     }
 
-    // copy everything else, that"s not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
+	javadoc {
+		options.tags = ["reason"]
+	}
+
+    base {
+	    archivesName = "${rootProject.name}-${project.name}"
+    }
+
+	jar {
+		from(rootProject.file("LICENSE.md")) {
+			rename { "LICENSE_${mod_name}.md" }
+		}
+		manifest {
+			attributes([
+				'Specification-Title'       : rootProject.name,
+				'Specification-Version'     : project.version,
+				'Implementation-Title'      : "${rootProject.name}-${project.name}",
+                'Maven-Artifact'            : "${maven_group_id}:${rootProject.name}-${project.name}:${project.version}",
+				'Implementation-Version'    : project.version,
+				'Implementation-Timestamp'  : NOW.format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				'Timestamp'                 : NOW.toInstant().toEpochMilli(),
+				'Built-On-Java'             : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+				'Built-On-Minecraft'        : libs.versions.minecraft.get()
+			])
+		}
+	}
+
+	sourcesJar {
+		from(rootProject.file("LICENSE.md")) {
+			rename { "LICENSE_${mod_name}.md" }
+		}
+	}
+
+	repositories {
+		mavenCentral()
+
+		maven {
+			name = "Sponge"
+			url = "https://repo.spongepowered.org/repository/maven-public"
+			content {
+				includeGroup "org.spongepowered"
+			}
+		}
+
+		maven {
+			name = "ParchmentMC"
+			url = "https://maven.parchmentmc.org"
+			content {
+				includeGroupByRegex "org\\.parchmentmc(\\..*)?"
+			}
+		}
+
+		maven {
+			name = "Quilt"
+			url = "https://maven.quiltmc.org/repository/release"
+		}
+
+		maven {
+			name = "Fabric"
+			url = "https://maven.fabricmc.net"
+		}
+
+		maven {
+			name = "NeoForge"
+			url = "https://maven.neoforged.net/releases"
+		}
+
+		maven {
+			name = "Up-Mods"
+			url = "https://maven.uuid.gg/releases"
+		}
+
+		maven {
+			name = "TeamResourceful"
+			url = "https://maven.teamresourceful.com/repository/maven-releases"
+		}
+
+		maven {
+			name = "JourneyMap"
+			url = "https://jm.gserv.me/repository/maven-public"
+		}
+
+		maven {
+			name = "TerraformersMC"
+			url = "https://maven.terraformersmc.com/releases"
+		}
+
+		maven {
+			name = "Modrinth"
+			url = "https://api.modrinth.com/maven"
+			content {
+				includeGroup "maven.modrinth"
+			}
+		}
+
+        maven {
+            name = "CurseMaven"
+            url = "https://www.cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.encoding = "UTF-8"
+		it.options.release.set(javaVersion)
+	}
+
+	processResources {
+        filteringCharset "UTF-8"
+
+		def expandProps = [
+			"version"                       : version,
+			"maven_group_id"                : maven_group_id,
+			"mod_id"                        : mod_id,
+			"mod_display_name"              : mod_display_name,
+			"mod_description"               : mod_description,
+			"sources_url"                   : sources_url,
+            "issues_url"                    : issues_url,
+			"license_url"					: license_url,
+			"discord_url"                   : discord_url,
+			"homepage_url"                  : homepage_url,
+			"minecraft_version"             : libs.versions.minecraft.get(),
+			"curseforge_id"					: curseforge_id,
+			"modrinth_id"					: modrinth_id,
+
+			"quilt_loader_version"          : quilt.versions.quilt.loader.get(),
+			"fabric_loader_version"         : fabric.versions.fabric.loader.get(),
+		]
+
+		filesMatching(['pack.mcmeta', '*.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+			expand expandProps
+		}
+		inputs.properties(expandProps)
+	}
+
+	// Disables Gradle's custom module metadata from being published to maven. The
+	// metadata includes mapped dependencies which are not reasonably consumable by
+	// other mod developers.
+	tasks.withType(GenerateModuleMetadata).configureEach {
+		enabled = false
+	}
+
+    publishing {
+        publications {
+            "mavenJava${project.name}"(MavenPublication) {
+				artifactId "${rootProject.name}-${project.name}"
+				from components.java
+			}
+        }
+    }
+}
+
+publishing {
+    repositories {
+        if (ENV.MAVEN_UPLOAD_URL) {
+            maven {
+                url = ENV.MAVEN_UPLOAD_URL
+                credentials {
+                    username = ENV.MAVEN_UPLOAD_USERNAME
+                    password = ENV.MAVEN_UPLOAD_PASSWORD
+                }
+            }
+        }
     }
 }
