@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
-  "group": "cobwebs",
+  "category": "misc",
+  "group": "cobweb",
   "pattern": [
     "# #",
     " s ",
