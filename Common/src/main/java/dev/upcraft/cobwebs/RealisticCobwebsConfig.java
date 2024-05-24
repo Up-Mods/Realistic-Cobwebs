@@ -23,7 +23,8 @@ import com.teamresourceful.resourcefulconfig.web.annotations.WebInfo;
                 @Link(
                         value = "https://github.com/Up-Mods/Realistic-Cobwebs",
                         icon = "github",
-                        title = "Github")
+                        title = "Github"
+                )
         }
 )
 @Config(RealisticCobwebs.MODID)
@@ -37,4 +38,21 @@ public final class RealisticCobwebsConfig {
 
     @ConfigEntry(id = "flint_and_steel_damage_per_use", type = EntryType.INTEGER, translation = "config.realistic_cobwebs.flint_and_steel_damage_per_use")
     public static int flintAndSteelDamagePerUse = 1;
+
+    @ConfigEntry(id = "fire_aspect_behavior", type = EntryType.ENUM, translation = "config.realistic_cobwebs.fire_aspect_behavior")
+    public static FireAspectBehavior fireAspectBehavior = FireAspectBehavior.SINGLE;
+
+    public enum FireAspectBehavior {
+        SINGLE,
+        BURST,
+        DISABLED;
+
+        boolean shouldDoBurst() {
+            return this == BURST;
+        }
+
+        boolean shouldBurnCobwebs() {
+            return this != DISABLED;
+        }
+    }
 }

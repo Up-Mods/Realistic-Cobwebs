@@ -1,5 +1,6 @@
 {
   "config.realistic_cobwebs.torch_consume_chance": "Torch Consume Chance",
   "config.realistic_cobwebs.flint_and_steel_burst_enabled": "Flint and Steel Burst Enabled",
-  "config.realistic_cobwebs.flint_and_steel_damage_per_use": "Flint and Steel Damage"
+  "config.realistic_cobwebs.flint_and_steel_damage_per_use": "Flint and Steel Damage",
+  "config.realistic_cobwebs.fire_aspect_behavior": "Fire Aspect Behavior"
 }
