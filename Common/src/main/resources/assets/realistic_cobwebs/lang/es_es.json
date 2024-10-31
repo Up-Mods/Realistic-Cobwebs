@@ -1,0 +1,6 @@
+{
+  "config.realistic_cobwebs.torch_consume_chance": "Probabilidad de que la Antorcha se consuma",
+  "config.realistic_cobwebs.flint_and_steel_burst_enabled": "Burst de Pedernal y Hierro Activado",
+  "config.realistic_cobwebs.flint_and_steel_damage_per_use": "Daño por uso al Pedernal y Hierro",
+  "config.realistic_cobwebs.fire_aspect_behavior": "Comportamiento de Aspecto Ígneo"
+}
