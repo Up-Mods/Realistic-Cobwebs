@@ -51,7 +51,7 @@ public class RealisticCobwebs {
                     burnBlock(serverLevel, startPos, serverLevel.getRandom(), isBurst, isSoulTorch ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME);
                     if (!player.isCreative()) {
                         if(stack.getMaxDamage() > 0) {
-                            stack.hurtAndBreak(RealisticCobwebsConfig.flintAndSteelDamagePerUse, player, EquipmentSlot.MAINHAND);
+                            stack.hurtAndBreak(RealisticCobwebsConfig.flintAndSteelDamagePerUse, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
                         }
                         else if(player.getRandom().nextFloat() < RealisticCobwebsConfig.torchConsumeChance) {
                             stack.shrink(1);
