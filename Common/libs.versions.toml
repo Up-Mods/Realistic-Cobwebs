@@ -28,7 +28,7 @@ jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "j
 
 resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1", version.ref = "resourcefulconfig" }
 resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1", version.ref = "resourcefulconfig" }
-resourcefulconfig_forge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.20.1", version.ref = "resourcefulconfig" }
+resourcefulconfig_forge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1", version.ref = "resourcefulconfig" }
 
 emi = { module = "dev.emi:emi-xplat-mojmap", version.ref = "emi" }
 emi_neoforge = { module = "dev.emi:emi-neoforge", version.ref = "emi" }
