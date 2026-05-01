@@ -30,9 +30,6 @@ dependencyResolutionManagement {
         libs {
             from(files("./Common/libs.versions.toml"))
         }
-        quilt {
-            from(files("./Quilt/libs.versions.toml"))
-        }
         neoforge {
             from(files("./NeoForge/libs.versions.toml"))
         }
@@ -59,4 +56,4 @@ buildCache {
 
 rootProject.name = 'Realistic-Cobwebs'
 
-include 'Common', 'NeoForge', 'Quilt', 'Fabric'
+include 'Common', 'NeoForge', 'Fabric'

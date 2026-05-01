@@ -1,16 +1,16 @@
 [versions]
-minecraft = "1.20.1"
+minecraft = "26.1.2"
 
 # The latest versions are available at https://parchmentmc.org/docs/getting-started
 parchment = "2023.09.03"
 
 mixin = "0.8.5"
-mixin_extras = "0.3.5"
-asm = "9.6"
+mixin_extras = "0.5.4"
+asm = "9.9.1"
 jetbrains_annotations = "24.1.0"
-vanilla_gradle = "0.2.1-SNAPSHOT"
+vanilla_gradle = "0.3.2-SNAPSHOT"
 
-resourcefulconfig = "2.1.2"
+resourcefulconfig = "4.0.1"
 emi = "1.1.4+1.20.1"
 
 [libraries]
@@ -26,8 +26,8 @@ asm_tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
 asm_util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
 jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains_annotations" }
 
-resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-1.20.1", version.ref = "resourcefulconfig" }
-resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-1.20.1", version.ref = "resourcefulconfig" }
+resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1", version.ref = "resourcefulconfig" }
+resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1", version.ref = "resourcefulconfig" }
 resourcefulconfig_forge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-forge-1.20.1", version.ref = "resourcefulconfig" }
 
 emi = { module = "dev.emi:emi-xplat-mojmap", version.ref = "emi" }

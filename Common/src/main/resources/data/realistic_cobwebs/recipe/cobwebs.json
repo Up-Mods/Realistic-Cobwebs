@@ -8,15 +8,11 @@
     "# #"
   ],
   "key": {
-    "#": {
-      "tag": "realistic_cobwebs:strings"
-    },
-    "s": {
-      "tag": "realistic_cobwebs:slimeballs"
-    }
+    "#": "#realistic_cobwebs:strings",
+    "s": "#realistic_cobwebs:slimeballs"
   },
   "result": {
-    "item": "minecraft:cobweb",
+    "id": "minecraft:cobweb",
     "count": 4
   }
 }
