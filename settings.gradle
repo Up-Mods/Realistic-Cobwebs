@@ -51,4 +51,4 @@ buildCache {
 
 rootProject.name = 'Realistic-Cobwebs'
 
-include 'Common', 'NeoForge', 'Fabric'
+include 'Common', /*'NeoForge',*/ 'Fabric'
