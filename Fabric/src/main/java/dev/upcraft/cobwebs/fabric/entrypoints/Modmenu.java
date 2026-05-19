@@ -1,5 +1,6 @@
 package dev.upcraft.cobwebs.fabric.entrypoints;
 
+import com.teamresourceful.resourcefulconfig.api.client.ResourcefulConfigScreen;
 import com.teamresourceful.resourcefulconfig.client.ConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -10,6 +11,6 @@ public class Modmenu implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> new ConfigScreen(parent, null, RealisticCobwebs.CONFIGURATOR.getConfig(RealisticCobwebsConfig.class));
+        return ResourcefulConfigScreen.getFactory(RealisticCobwebs.MODID)::apply;
     }
 }

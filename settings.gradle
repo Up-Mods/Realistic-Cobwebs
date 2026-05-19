@@ -2,10 +2,6 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            name = 'Quilt'
-            url = 'https://maven.quiltmc.org/repository/release'
-        }
-        maven {
 			name = 'NeoForge'
 			url = 'https://maven.neoforged.net/releases'
 		}
@@ -13,7 +9,6 @@ pluginManagement {
 			name = 'Sponge'
 			url = 'https://repo.spongepowered.org/repository/maven-public'
 		}
-        // Currently needed for Intermediary and other temporary dependencies
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net'
@@ -29,9 +24,6 @@ dependencyResolutionManagement {
     versionCatalogs {
         libs {
             from(files("./Common/libs.versions.toml"))
-        }
-        quilt {
-            from(files("./Quilt/libs.versions.toml"))
         }
         neoforge {
             from(files("./NeoForge/libs.versions.toml"))
@@ -59,4 +51,4 @@ buildCache {
 
 rootProject.name = 'Realistic-Cobwebs'
 
-include 'Common', 'NeoForge', 'Quilt', 'Fabric'
+include 'Common', /*'NeoForge',*/ 'Fabric'
