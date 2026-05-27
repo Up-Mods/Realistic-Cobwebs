@@ -1,0 +1,91 @@
+[versions]
+minecraft = "26.1.2"
+java = "25"
+
+# https://projects.neoforged.net/neoforged/moddevgradle
+moddevgradle = "2.0.141"
+# https://projects.neoforged.net/neoforged/neoform
+neoform = "26.1.2-1"
+
+# NeoForge
+# https://projects.neoforged.net/neoforged/neoforge
+neoforge = "26.1.2.66-beta"
+# https://projects.neoforged.net/neoforged/fancymodloader
+# MUST match the version that neoforge uses! https://github.com/neoforged/NeoForge/blob/26.1.x/gradle.properties
+fancymodloader = "11.0.13"
+
+# Fabric
+# https://fabricmc.net/develop
+fabric_loom = "1.16.2" # https://maven.fabricmc.net/net/fabricmc/fabric-loom/net.fabricmc.fabric-loom.gradle.plugin/
+fabric_loader = "0.19.2"
+fabric_api = "0.149.1+26.1.2"
+
+idea_ext = "1.4.1"
+
+# Minecraft dependencies
+jetbrains_annotations = "26.1.0"
+mixin = "0.17.3+mixin.0.8.7"
+mixin_extras = "0.5.4"
+asm = "9.9.1"
+jna = "5.17.0" # https://maven.neoforged.net/#/mojang-meta/net/neoforged/minecraft-dependencies/26.1.2
+
+# Other dependencies
+autoservice = "1.1.1"
+junit = "6.0.3"
+
+# Mods
+# https://modrinth.com/mod/emi/versions
+emi = "1.1.22+1.21.1"
+# https://modrinth.com/mod/modmenu/versions
+modmenu = "18.0.0-beta.1"
+# https://beehive.sh/mod/resourcefulconfig/versions
+resourcefulconfig = "4.0.1"
+
+[libraries]
+# NeoForge
+neoforge_testframework = { module = "net.neoforged:testframework", version.ref = "neoforge" }
+neoforge_mcdeps = { module = "net.neoforged:minecraft-dependencies", version.ref = "minecraft" }
+neoforge_fancymodloader = { module = "net.neoforged.fancymodloader:loader", version.ref = "fancymodloader" }
+
+# Fabric
+fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
+fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
+
+# Minecraft dependencies
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+mixin = { module = "net.fabricmc:sponge-mixin", version.ref = "mixin" }
+mixin_extras = { module = "io.github.llamalad7:mixinextras-common", version.ref = "mixin_extras" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm_analysis = { module = "org.ow2.asm:asm-analysis", version.ref = "asm" }
+asm_commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
+asm_tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
+asm_util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+jna = { module = "net.java.dev.jna:jna-platform", version.ref = "jna" }
+jetbrains_annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains_annotations" }
+
+# Other dependencies
+autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
+autoservice_annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoservice" }
+junit_api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit_launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+slf4j_api = { module = "org.slf4j:slf4j-api" }
+
+# Mods
+emi = { module = "dev.emi:emi-xplat-mojmap", version.ref = "emi" }
+emi_neoforge = { module = "dev.emi:emi-neoforge", version.ref = "emi" }
+emi_fabric = { module = "dev.emi:emi-fabric", version.ref = "emi" }
+
+modmenu_fabric = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
+
+resourcefulconfig = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-common-26.1", version.ref = "resourcefulconfig" }
+resourcefulconfig_fabric = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-fabric-26.1", version.ref = "resourcefulconfig" }
+resourcefulconfig_neoforge = { module = "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-26.1", version.ref = "resourcefulconfig" }
+
+[bundles]
+mixin = ["mixin", "mixin_extras", "asm", "asm_analysis", "asm_commons", "asm_tree", "asm_util"]
+
+[plugins]
+moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle" }
+fabric_loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric_loom" }
+idea_ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "idea_ext" }

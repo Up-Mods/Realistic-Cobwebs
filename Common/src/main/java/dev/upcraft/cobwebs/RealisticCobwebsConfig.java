@@ -14,7 +14,7 @@ import com.teamresourceful.resourcefulconfig.api.annotations.ConfigInfo;
                         text = "Modrinth"
                 ),
                 @ConfigInfo.Link(
-                        value = "https://curseforge.com/projects/250393",
+                        value = "https://mods.cf/250393",
                         icon = "curseforge",
                         text = "Curseforge"
                 ),

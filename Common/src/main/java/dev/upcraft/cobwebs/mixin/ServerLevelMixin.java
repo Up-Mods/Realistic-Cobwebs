@@ -1,5 +1,6 @@
 package dev.upcraft.cobwebs.mixin;
 
+import dev.upcraft.cobwebs.RealisticCobwebs;
 import dev.upcraft.cobwebs.RealisticCobwebsTags;
 import dev.upcraft.cobwebs.util.BurnPosInfo;
 import dev.upcraft.cobwebs.util.WorldScheduler;
@@ -30,8 +31,6 @@ import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static dev.upcraft.cobwebs.RealisticCobwebs.burnBlock;
-
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin extends Level implements WorldScheduler {
 
@@ -55,7 +54,7 @@ public abstract class ServerLevelMixin extends Level implements WorldScheduler {
             toTick = new ObjectOpenHashSet<>();
             original.forEach(info -> {
                 if (this.getBlockState(info.pos()).is(RealisticCobwebsTags.COBWEBS)) {
-                    burnBlock((ServerLevel) (Object) this, info.pos(), this.random, true, info.particleType());
+                    RealisticCobwebs.burnBlock((ServerLevel) (Object) this, info.pos(), this.random, true, info.particleType());
                 }
             });
         }

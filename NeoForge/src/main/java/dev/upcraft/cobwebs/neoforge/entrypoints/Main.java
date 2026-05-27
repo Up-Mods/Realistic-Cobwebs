@@ -1,7 +1,7 @@
 package dev.upcraft.cobwebs.neoforge.entrypoints;
 
 import dev.upcraft.cobwebs.RealisticCobwebs;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
 
 @Mod(RealisticCobwebs.MODID)
 public class Main {

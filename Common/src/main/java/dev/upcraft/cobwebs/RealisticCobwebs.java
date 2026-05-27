@@ -1,10 +1,12 @@
 package dev.upcraft.cobwebs;
 
 import com.teamresourceful.resourcefulconfig.api.loader.Configurator;
+import dev.upcraft.cobwebs.service.RCPlatform;
 import dev.upcraft.cobwebs.util.WorldScheduler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -15,7 +17,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -43,12 +44,13 @@ public class RealisticCobwebs {
 
         BlockPos startPos = hitResult.getBlockPos();
         if (level.getBlockState(startPos).is(RealisticCobwebsTags.COBWEBS)) {
-            var hasFireAspect = RealisticCobwebsConfig.fireAspectBehavior.shouldBurnCobwebs() && EnchantmentHelper.getItemEnchantmentLevel(level.registryAccess().getOrThrow(Enchantments.FIRE_ASPECT), stack) > 0;
+            var lookup = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            var hasFireAspect = RealisticCobwebsConfig.fireAspectBehavior.shouldBurnCobwebs() && RCPlatform.INSTANCE.getItemEnchantments(stack, lookup).getLevel(lookup.getOrThrow(Enchantments.FIRE_ASPECT)) > 0;
             var isBurst = (hasFireAspect && RealisticCobwebsConfig.fireAspectBehavior.shouldDoBurst()) || (RealisticCobwebsConfig.flintAndSteelBurstEnabled && stack.is(RealisticCobwebsTags.BURST_TRIGGERS));
             var isSoulTorch = stack.is(RealisticCobwebsTags.SOUL_TORCHES);
             if (isBurst || hasFireAspect || isSoulTorch || stack.is(RealisticCobwebsTags.TORCHES) || stack.is(RealisticCobwebsTags.BURST_TRIGGERS)) {
                 if (level instanceof ServerLevel serverLevel) {
-                    burnBlock(serverLevel, startPos, serverLevel.getRandom(), isBurst, isSoulTorch ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME);
+                    burnBlock(serverLevel, startPos, player.getRandom(), isBurst, isSoulTorch ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME);
                     if (!player.isCreative()) {
                         if(stack.getMaxDamage() > 0) {
                             stack.hurtAndBreak(RealisticCobwebsConfig.flintAndSteelDamagePerUse, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);

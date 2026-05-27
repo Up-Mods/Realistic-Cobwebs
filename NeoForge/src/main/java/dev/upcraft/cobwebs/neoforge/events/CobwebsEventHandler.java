@@ -2,11 +2,11 @@ package dev.upcraft.cobwebs.neoforge.events;
 
 import dev.upcraft.cobwebs.RealisticCobwebs;
 import net.minecraft.world.InteractionResult;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = RealisticCobwebs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = RealisticCobwebs.MODID)
 public class CobwebsEventHandler {
 
     @SubscribeEvent
