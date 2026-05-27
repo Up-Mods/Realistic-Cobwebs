@@ -1,1 +1,1 @@
-Copyright (c) 2016-2024 Up, All rights reserved.
+Copyright (c) 2016 Up (<https://upcraft.dev>), All rights reserved.
