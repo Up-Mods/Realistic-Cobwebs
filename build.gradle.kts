@@ -31,19 +31,6 @@ version = tag.orElse(provider { buildString {
 
 println("Building ${project.name} $version")
 
-providers.environmentVariable("MAVEN_UPLOAD_URL").orNull?.let { url ->
-    publishing {
-        repositories {
-            maven(uri(url)) {
-                credentials {
-                    username = providers.environmentVariable("MAVEN_UPLOAD_USERNAME").orNull
-                    password = providers.environmentVariable("MAVEN_UPLOAD_PASSWORD").orNull
-                }
-            }
-        }
-    }
-}
-
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
 	module {

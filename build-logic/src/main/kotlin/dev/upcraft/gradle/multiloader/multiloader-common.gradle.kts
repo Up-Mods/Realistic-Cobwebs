@@ -158,6 +158,17 @@ publishing {
             from(components["java"])
         }
     }
+
+    providers.environmentVariable("MAVEN_UPLOAD_URL").orNull?.let { url ->
+        repositories {
+            maven(uri(url)) {
+                credentials {
+                    username = providers.environmentVariable("MAVEN_UPLOAD_USERNAME").orNull
+                    password = providers.environmentVariable("MAVEN_UPLOAD_PASSWORD").orNull
+                }
+            }
+        }
+    }
 }
 
 // Declare capabilities on the outgoing configurations.
