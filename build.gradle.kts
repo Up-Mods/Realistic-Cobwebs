@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalTime::class)
 
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -14,18 +15,23 @@ plugins {
     alias(libs.plugins.fabric.loom) apply false
 }
 
+println(DateTimeFormatter::class.qualifiedName)
+
 val now = Instant.fromEpochSeconds(Clock.System.now().epochSeconds).toJavaInstant()
-val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.Md.Hm")
+val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yy.M.d").withZone(ZoneId.of("UTC"))
 val buildTime = providers.environmentVariable("BUILD_TIME").orElse(provider { formatter.format(now) })
 
 val tag = providers.environmentVariable("TAG")
-val isPreviewBuild = tag.orNull?.matches(Regex(".+-.+")) ?: false
-val buildNumber = tag.orElse(providers.environmentVariable("BUILD_NUMBER").map { "build.${it}" }.orElse(buildTime))
+val isPreviewBuild = tag.orNull?.matches(Regex(".+-.+")) ?: true
+val buildNumber = providers.environmentVariable("BUILD_NUMBER").map { "build.${it}" }.orElse(buildTime)
 
 version = tag.orElse(provider { buildString {
-    append("${libs.versions.minecraft.get()}-development")
-    if(isPreviewBuild && !tag.isPresent) {
-        append(buildNumber.map { "+${it}" }.getOrElse(""))
+    append("development")
+    append("-")
+    append(libs.versions.minecraft.get())
+    if(isPreviewBuild) {
+        append("+")
+        append(buildNumber.get())
     }
 } }).get()
 
