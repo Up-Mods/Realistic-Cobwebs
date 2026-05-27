@@ -164,3 +164,4 @@ jobs:
           webhook-url: ${{ secrets.ANNOUNCEMENT_WEBHOOK_URL }}
           curseforge-project-id: ${{ needs.publish_platforms.outputs.curseforge_id }}
           modrinth-project-id: ${{ needs.publish_platforms.outputs.modrinth_id }}
+          thumbnail-url: https://mod-assets.upcraft.dev/promo/realistic-cobwebs/icon_128x.png
